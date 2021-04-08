@@ -1,0 +1,48 @@
+<!--pages/goods/good.wxml-->
+<import src="../../components/header/header.wxml"></import>
+
+<template is="header"></template>
+<view id="goods">
+  <view class="leftnav">
+    <view wx:for="{{typeinfo}}" class="{{index===navActive?'active_category':''}}"  data-id="b{{item.id}}" data-index="{{index}}" bindtap="clickNav">
+      {{item.name}}
+    </view>
+  </view>
+  <view class="content">
+    <scroll-view class="scroll-view"
+    style="height:{{height}}px;" scroll-y="true" scroll-into-view="{{toView}}"
+    scroll-with-animation="true"
+    bindscroll="scroll">
+    <view class="category" id="b{{item.id}}" wx:for="{{menuinfo}}">
+      <view class="details">
+        <image src="https://alongz.cn/{{item.pic}}"></image>
+        <view class="good-info">
+          <view class="good-title">{{item.name}}</view>
+          <view class="good-price">{{item.price}}元</view>
+        </view>
+        <view class="option">
+          <block wx:if="{{item.num!=0}}">
+            <button id="sub" catchtap="sub" data-index="{{index}}">-</button>
+            <view class="num">{{item.num}}</view>
+          </block>
+          <button id="add" catchtap="add" data-index="{{index}}">+</button>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  </view>
+  <view class="bottomOrder">
+    <text class="bottomNum">{{shopcar.num}}</text>
+    <image class="shopcar" src="../../asset/image/shopcar.png" alt=""></image>
+    <text class="bottomPrice">￥{{shopcar.price}}</text>
+    <button class="issure" catchtap="isSure">选好了</button>
+  </view>
+</view>
+
+<view wx:if="showChoicetableno" class="choiceTable">
+  <picker name="" id="" bindchange="bindPickerChange" value="{{index}}" range="{{tables}}">
+    <view class="picker">
+      餐桌:{{ tables[index]}}
+    </view>
+  </picker>
+</view>

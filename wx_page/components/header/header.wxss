@@ -1,0 +1,25 @@
+/* components/header/header.wxss */
+#header{
+  height: 140px;
+  overflow: hidden;
+  background-color: #7bd49c;
+  display: flex;
+  align-items: center;
+}
+#header image{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+#header .header-info{
+  flex: 1;
+  margin-left: 10px;
+  color: white;
+  display: flex;
+  flex-flow: column;
+}
+#header .header-info .header-title{
+  font-size: 19px;
+  margin: 5px 0;
+}
+

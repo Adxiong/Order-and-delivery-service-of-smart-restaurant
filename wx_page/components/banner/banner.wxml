@@ -1,0 +1,11 @@
+<!--components/banner/banner.wxml-->
+<template name="banner">
+  <swiper class="banner" indicator-dots="true" autoplay="true"                                                      >
+    <swiper-item>
+      <image src="https://t7.baidu.com/it/u=1595072465,3644073269&fm=193&f=GIF" lazy-load="true"></image>
+    </swiper-item>
+    <swiper-item>
+      <image src="https://t7.baidu.com/it/u=1595072465,3644073269&fm=193&f=GIF" lazy-load="true"></image>
+    </swiper-item>
+  </swiper>
+</template>
