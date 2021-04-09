@@ -1,5 +1,5 @@
-APPID = "wx734ed0ba10438ba5"
-APPSECRET = "00a9fbef76dfb222789378a6ead51eb1"
+APPID = "APPID"
+APPSECRET = "APPSECRET"
 
 DIALECT = 'mysql'
 DRIVER = 'pymysql'
