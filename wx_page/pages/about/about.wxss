@@ -1,6 +1,0 @@
-/* pages/about/about.wxss */
-
-text{
-  color: #f40;
-  font-size: 20px;
-}
