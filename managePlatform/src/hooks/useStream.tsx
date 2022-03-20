@@ -4,11 +4,20 @@
  * @Author: Adxiong
  * @Date: 2022-03-20 15:42:28
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-20 15:53:45
+ * @LastEditTime: 2022-03-20 23:52:59
  */
 
-const UseStream = (peer) => {
-  return null
+import { useEffect, useState } from "react"
+import { Peer } from "../rtcPeer/@type"
+
+const UseStream = ({peer}:Peer) => {
+  const [stream, setStream] = useState<MediaStream>()
+  useEffect( () => {
+    peer.on("track", (stream: MediaStream) => {
+      setStream(stream)
+    })
+  },[peer])
+  return stream
 }
 
 export default UseStream
