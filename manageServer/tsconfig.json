@@ -1,0 +1,16 @@
+/*
+ * @Description: 
+ * @version: 
+ * @Author: Adxiong
+ * @Date: 2022-03-21 15:45:43
+ * @LastEditors: Adxiong
+ * @LastEditTime: 2022-03-21 15:45:53
+ */
+ {
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es2016",
+    "outDir": "./dist"
+  },
+  "include": ["src"]
+}
