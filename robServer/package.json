@@ -1,0 +1,34 @@
+{
+  "name": "robserver",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "eslint": "eslint ./ --ext .ts",
+    "fix": "eslint --fix ./ --ext .ts",
+    "build": "npm run eslint && tsc"
+  },
+  "author": "",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint": "^8.11.0"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "fs": "^0.0.1-security",
+    "js-beautify": "^1.14.0",
+    "log4js": "^6.4.3",
+    "path": "^0.12.7",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2",
+    "uuid": "^8.3.2"
+  }
+}
