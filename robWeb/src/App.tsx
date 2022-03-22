@@ -4,13 +4,14 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 17:39:30
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-21 23:41:14
+ * @LastEditTime: 2022-03-22 15:33:10
  */
 import { SettingOutlined } from '@ant-design/icons'
 import style from "./app.module.less"
 import { useEffect, useState } from 'react'
 import { Modal } from 'antd'
 import UserConfig from './pages/UserConfig'
+import Routes from './router'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -34,7 +35,7 @@ function App() {
         >
         <UserConfig></UserConfig>
       </Modal>
-      我是小H！有什么可以帮到您^v^
+      <Routes></Routes>
     </div>
   )
 }
