@@ -4,13 +4,12 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 23:45:16
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-21 23:48:20
+ * @LastEditTime: 2022-03-23 21:21:02
  */
 import RTCPeer  from '.';
 import * as io from 'socket.io-client';
 import { Message } from './@types';
 import Peer from './peer';
-import { PeerInfo } from './@types/index';
 
 
 
@@ -28,6 +27,7 @@ export default class SocketClient {
   connect () {
     //存在socket 便不用重新连接
     if (this.socket) return
+    
     this.socket = io.connect(this.url, {
       withCredentials: true,
       transports: ['websocket'],
@@ -43,81 +43,24 @@ export default class SocketClient {
     })
   }
 
-
-  roomInfo(message: Message) {
-
-    if(message.type === 'roomInfo') {
-      const {users, userInfo} = message.payload as {userInfo: PeerInfo, users: PeerInfo[]}      
-      this.peer.local.id = userInfo.id
-      this.peer.local.nick = userInfo.nick
-      users.
-      forEach( peerInfo => {
-        this.peer.connectPeer(peerInfo)
-      });
-      this.peer.emit('roomInfo', users)
-    }
-  }
-
-  offer(message: Message){
-    /**
-     * 收到offer  message里有userinfo。根据userInfo查找peer 没有查到就创建rtc -> add -> connect
-     * 找到直接用peer.replyanswer（）
-     */        
-    if(message.userInfo && message.type === 'offer') {
-      const { id, nick } = message.userInfo
-      let peer = this.peer.findPeer(id)
-      if( !peer ) {
-        peer = new Peer(
-          id,
-          nick,
-          this.peer.peerConfig ,
-          this.peer
-        )
-        this.peer.addPeer(peer)
-        peer.connect()
-        this.peer.pushLocalStream(peer)
-      }
-      
-      peer.receiveOffer(message)
-    }
-   
-  }
-
   answer(message: Message){
-    if(message.userInfo && message.type === 'answer'){
-      const {id, nick} = message.userInfo
-      const peer = this.peer.findPeer(id)
-      peer?.receiveAnswer(message)
+    if(message.type === 'answer'){
+      this.peer.peer?.receiveAnswer(message)
     }
   }
 
   icecandidate(message: Message){
-    if(message.userInfo && message.type === 'icecandidate') {
-      const {id, nick} = message.userInfo
-      const peer = this.peer.findPeer(id)      
-      peer?.receiveIceCandidate(message)
+    if(message.type === 'iceCandidate') {
+      this.peer.peer?.receiveIceCandidate(message)
     }
   }
 
-  newUserJoin(message: Message) {
-    if(message.userInfo) {
-      const {id} = message.userInfo
-      // this.peer.emit('roomInfo', [message.userInfo])      
-    }
-  }
   
   level(message: Message){
-    
-    if(message.type === 'level' && message.userInfo){
-      const {id, nick} = message.userInfo
-      const peer = this.peer.findPeer(id)
-      if( peer) {
-        peer.close()
-        this.peer.local.peers = this.peer.local.peers.filter( p => p.id != id)
+    if(message.type === 'level'){
+      if( this.peer.peer) {
+        this.peer.peer.close()
       }
-
-      this.peer.emit("level",this.peer.local.peers)
-
     }
   }
 
@@ -127,19 +70,13 @@ export default class SocketClient {
     instance[message.type](message)
   }
 
-  sendMessage(chatInfo: {[propName: string]: string}) {
-    this.socket && this.socket.emit('message',JSON.stringify(chatInfo))
-  }
-
   send(data: string) {
     this.socket && this.socket.send(data)
   }
 
   close(){
     this.socket?.emit('level', {
-      id: this.peer.local.id,
-      nick: this.peer.local.nick,
-      roomId: this.peer.local.roomId
+      nick: this.peer.nick,
     })
     this.socket?.close()
   }
