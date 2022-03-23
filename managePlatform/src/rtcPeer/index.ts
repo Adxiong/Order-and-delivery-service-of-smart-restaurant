@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-03-20 19:57:24
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-23 21:38:04
+ * @LastEditTime: 2022-03-24 00:08:21
  */
 
 import { Message } from "./@type"
@@ -19,15 +19,17 @@ class RtcPeer {
   socket: SocketClient
   peers: Peer[] = []
   eventBus = new EventEmitter()
-  constructor(signalServer: string) {
+  peerConfig: RTCConfiguration
+  constructor({signalServer, peerConfig}: {signalServer: string, peerConfig: RTCConfiguration}) {
     this.signalServer = signalServer
+    this.peerConfig = peerConfig
     this.socket = new SocketClient({url:this.signalServer, rtcPeer:this})
     return this
   }
   
   connect(id: string, nick: string) {
     const peer = new Peer({
-      peer: new RTCPeerConnection,
+      peer: new RTCPeerConnection(this.peerConfig),
       id,
       nick,
       socket:this.socket
@@ -41,12 +43,13 @@ class RtcPeer {
   }
 
   addPeer(peer: Peer) {
-    this.peers.push(peer)
-    //通知addpeer
+    this.peers.push(peer)    
+    //通知addpeer    
+    this.emit('addPeer', ...this.peers)
   }
   
-  receiveIce(message: Message) {
-    const {peerConnection} = this.findPeer(message.id)
+  receiveIce(message: Message) {    
+    const {peerConnection} = this.findPeer(message.userInfo.id)
     peerConnection.addIceCandidate(message.payload as RTCIceCandidateInit)
   }
 

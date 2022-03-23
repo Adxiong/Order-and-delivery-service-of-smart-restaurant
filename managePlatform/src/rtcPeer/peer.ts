@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 14:56:05
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-23 21:58:33
+ * @LastEditTime: 2022-03-23 22:10:19
  */
 
 import EventEmitter from "eventemitter3"
@@ -34,13 +34,11 @@ class Peer {
     return this
   }
 
-
   registerEventListener (peer: RTCPeerConnection) {
     peer.addEventListener("track", (event) => {
       const stream = event.streams[0]
       //通知
-      console.log(stream);
-      
+      this.emit("track", stream)
     })
     peer.addEventListener("icecandidate", (event) => {
       if (event.candidate) {
@@ -51,13 +49,7 @@ class Peer {
         })
       }
     })
-
-    peer.addEventListener("datachannel", (event) => {
-      console.log(event);
-      
-    })
   }
-
 
   on (event: string | symbol, fn: (...args: any[]) => void, context?: any) {
     this.eventBus.on(event, fn, context)
