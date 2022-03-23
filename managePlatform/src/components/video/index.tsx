@@ -4,11 +4,11 @@
  * @Author: Adxiong
  * @Date: 2022-03-20 15:38:47
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-20 23:53:44
+ * @LastEditTime: 2022-03-21 15:38:17
  */
 import { useEffect, useRef } from "react"
 import useStream from "../../hooks/useStream"
-import { Peer } from "../../rtcPeer/@type"
+import Peer from "../../rtcPeer/peer"
 import style from "./styles/index.module.less"
 
 const Video = ({peer}: {peer: Peer}) => {

@@ -4,37 +4,36 @@
  * @Author: Adxiong
  * @Date: 2022-03-20 19:57:24
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-20 23:56:58
+ * @LastEditTime: 2022-03-23 21:38:04
  */
 
-import { Peer, Message } from "./@type"
+import { Message } from "./@type"
 import SocketClient from "./socket"
 import EventEmitter from "eventemitter3"
+import Peer from "./peer"
+
 
 
 class RtcPeer {
   signalServer: string
-  socket?: SocketClient
+  socket: SocketClient
   peers: Peer[] = []
   eventBus = new EventEmitter()
   constructor(signalServer: string) {
     this.signalServer = signalServer
-
-  }
-
-  connect() {
     this.socket = new SocketClient({url:this.signalServer, rtcPeer:this})
+    return this
   }
-
-  join(id: string, nick: string) {
-    const instance: Peer = {
+  
+  connect(id: string, nick: string) {
+    const peer = new Peer({
+      peer: new RTCPeerConnection,
       id,
       nick,
-      peer: new RTCPeerConnection(),
-    }
-    const dc = instance.peer.createDataChannel("dc")
-    this.registerPeerEvent(instance)
-    this.addPeer(instance)
+      socket:this.socket
+    })
+    this.addPeer(peer)
+    return peer
   }
 
   findPeer(id: string) {
@@ -47,8 +46,8 @@ class RtcPeer {
   }
   
   receiveIce(message: Message) {
-    const {peer} = this.findPeer(message.id)
-    peer.addIceCandidate(message.payload as RTCIceCandidateInit)
+    const {peerConnection} = this.findPeer(message.id)
+    peerConnection.addIceCandidate(message.payload as RTCIceCandidateInit)
   }
 
   level(id: string) {
@@ -56,12 +55,12 @@ class RtcPeer {
     //通知level
   }
 
-  receiveOffer(message: Message) {
-    const peer = this.findPeer(message.id)
+  receiveOffer(message: Message) {    
+    const peer = this.connect(message.userInfo.id, message.userInfo.nick)
     this.replyAnswer(peer, message.payload as RTCSessionDescriptionInit)
   }
   replyAnswer(peer: Peer, offer: RTCSessionDescriptionInit) {
-    const instance = peer.peer
+    const instance = peer.peerConnection
     instance.setRemoteDescription(offer)
     instance.createAnswer()
     .then( answer => {
@@ -71,28 +70,6 @@ class RtcPeer {
         id: peer.id,
         payload: answer
       })
-    })
-  }
-
-  registerPeerEvent(instance : Peer) {
-    instance.peer.addEventListener("icecandidate", (event) => {
-      if(event.candidate) {
-        this.socket?.send({
-          type: "iceCandidate",
-          id: instance.id,
-          payload: event.candidate
-        })
-      }
-    })
-
-    instance.peer.addEventListener('track', (event: RTCTrackEvent) => {
-      instance.stream = event.streams[0]
-      //发送通知
-    })
-
-    instance.peer.addEventListener("datachannel", (event) => {
-      console.log(event);
-      
     })
   }
 
