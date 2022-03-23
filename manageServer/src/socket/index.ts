@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 15:51:27
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-23 21:38:57
+ * @LastEditTime: 2022-03-24 00:04:25
  */
 
 import * as io from 'socket.io'
@@ -116,13 +116,19 @@ export default class SocketServer {
     })
   }
 
-  icecandidate (socket, message) {    
-    console.log(message);
+  icecandidate (socket, message) {   
+    if( socket.id === this.superAdmin.id ) {
+      this.sendToUser( message.id, {
+        ...message,
+        userInfo: socket['userInfo']
+      })
+    } else {
+      this.sendToUser( this.superAdmin.id, {
+        ...message,
+        userInfo: socket['userInfo']
+      })
+    }
     
-    this.sendToUser( message.id, {
-      ...message,
-      userInfo: socket['userInfo']
-    })
   }
 
 }
