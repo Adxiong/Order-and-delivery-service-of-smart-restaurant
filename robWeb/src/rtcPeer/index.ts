@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 23:45:20
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-23 21:57:14
+ * @LastEditTime: 2022-03-23 23:38:06
  */
 import { Message } from './@types/index';
 import SocketClient from "./socket";
@@ -71,12 +71,21 @@ export default class RTCPeer {
       return 
     }
     return navigator.mediaDevices.getUserMedia(constraints)
-    .then( stream => {      
-      this.peer!.media = stream
-      const tracks = stream.getTracks()
+    .then( stream => {   
+      const peer = this.peer   
+      if (peer) {
+        peer.media = stream
+        console.log(stream);
+        
+        const tracks = stream.getTracks()
         tracks.forEach( track => {
-          this.peer!.addTrack(track, stream)
+          peer.addTrack(track, stream)
         }) 
+      }else{
+        console.log("peer不存在");
+        
+      }
+      
     })
     .catch( err => {
       throw new Error(err)

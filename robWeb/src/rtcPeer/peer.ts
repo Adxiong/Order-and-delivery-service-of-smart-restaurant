@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 23:45:25
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-23 21:55:16
+ * @LastEditTime: 2022-03-23 23:35:18
  */
 
 
@@ -49,9 +49,7 @@ export default class Peer {
   }
 
   initPeerEvents () {
-    const pc = this.peerConnection
-    console.log("监听");
-    
+    const pc = this.peerConnection    
     pc.addEventListener("icecandidate", (event: RTCPeerConnectionIceEvent) => {
       console.log("chufa");
       

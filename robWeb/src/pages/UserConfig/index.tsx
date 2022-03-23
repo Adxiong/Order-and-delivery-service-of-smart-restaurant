@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 21:46:47
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-23 14:31:21
+ * @LastEditTime: 2022-03-23 23:40:04
  */
 import { Form, Input } from "antd";
 import { FormInstance, useForm } from "antd/lib/form/Form";
@@ -38,6 +38,7 @@ const UserConfig = ({form}: {form: FormInstance<any>}) => {
           >
           <Input></Input>
         </Form.Item>
+        <video className="video" width={200} height={200} controls autoPlay></video>
       </Form>
     </div>
   )

@@ -4,7 +4,7 @@
  * @Author: Adxiong
  * @Date: 2022-03-21 21:39:26
  * @LastEditors: Adxiong
- * @LastEditTime: 2022-03-23 20:24:54
+ * @LastEditTime: 2022-03-23 23:44:58
  */
 import SpeechRecognition, {useSpeechRecognition} from "react-speech-recognition"
 import { useContext, useEffect, useRef, useState } from "react"
@@ -81,7 +81,14 @@ const Main = () => {
       const rtc = new RTCPeer({
         signalServer: store.signalServer,
         nick: store.nick,
-        peerConfig: {
+        peerConfig:{
+          iceServers:[
+            {
+              urls:"turn:150.158.187.252:3478",
+              username:"adxiong",
+              credential: "0417.xyl"
+            }
+          ]
         }
       })
       rtc.connectPeer()
